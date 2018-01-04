@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+  <style>
+  label{
+    display: inline-block; 
+    width:10%;
+    }         
+    </style>
+<body>
+<form class ="myform" action="/action_page.php" onsubmit=" return (validate() && passwordCheck());">
+  <div class="form-group">
+      <label for="title">Title:</label>
+      <select name="title">
+          <option value="Miss">Miss</option>
+          <option value="Mr">Mr</option>           
+          <option value="Mrs">Mrs</option>
+        </select>
+  </div>
+  <label for="firstname">First Name:</label>
+  <input type="text" name="firstname" >
+  <br>
+  <label for="lastname">Last Name:</label>
+  <input type="text" name="lastname"   >
+  <br>
+  <label for="email">Email:</label>
+  <input type="email" name="email"  >
+  <br>
+  <label for="phone">Telephone:</label>
+  <input type="tel" pattern="\d{11}$"name="phone"  >
+  <br>
+  <label for="dob">Date of Birth:</label>
+  <input type="date" name="dob" value=""/>
+  <br>
+  <label for="address1">Address Line 1:</label>
+  <input type="text" name="address1" />
+  <br>
+  <label for="address1">Address Line 2:</label>
+  <input type="text" name="address1" />
+  <br>
+  <label for="city">City:</label>
+  <input type="text" name="city" />
+  <br>
+  <label for="county">County:</label>
+  <input type="text" name="county" />
+  <br>
+  <label for="postcode">Postcode:</label>
+  <input type="text" name="postcode" />
+  <br>
+  <br>
+  Data Protection:<br>
+  <input type="checkbox" name="emailconsent" value="emailconsent"> Email Consent<br>
+  <input type="checkbox" name="phoneconsent" value="phoneconsent"> Phone Consent<br>
+  <input type="checkbox" name="postalconsent" value="postalconsent"> Postal Consent <br>
+  <br>
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password" />
+  <br>
+  <label for="passwordcheck">Password Confirmation:</label>
+  <input type="password" id="passwordcheck" name="passwordcheck"/><div id="passwordmessage" style= "color:red;"  value="" ></div>
+  <br>
+  <input type="submit" value="Submit">
+</form> 
+
+
+
+<div class ="results"></div>
+<script>
+  function passwordCheck(){
+  
+  var password = document.getElementById("password").value;
+  var passwordcheck = document.getElementById("passwordcheck").value;
+  var ok = true;
+  if (password != passwordcheck){
+    document.getElementById("passwordmessage").append('Passwords do not match');
+    ok = false;
+  }
+  else {
+    document.getElementById("passwordmessage").innerHTML = 'Passwords match';
+  }
+  return ok;  
+  }
+</script>
+<script>
+/**
+ * Checks that an element has a non-empty `name` and `value` property.
+ * @param  {Element} element  the element to check
+ * @return {Bool}             true if the element is an input, false if not
+ */
+ const isValidElement = element => {
+  return element.name && element.value;
+};
+
+/**
+ * Checks if an element’s value can be saved (e.g. not an unselected checkbox).
+ * @param  {Element} element  the element to check
+ * @return {Boolean}          true if the value should be added, false if not
+ */
+const isValidValue = element => {
+  return (!['checkbox', 'radio'].includes(element.type) || element.checked);
+};
+
+/**
+ * Checks if an input is a checkbox, because checkboxes allow multiple values.
+ * @param  {Element} element  the element to check
+ * @return {Boolean}          true if the element is a checkbox, false if not
+ */
+const isCheckbox = element => element.type === 'checkbox';
+
+
+
+/**
+ * Retrieves input data from a form and returns it as a JSON object.
+ * @param  {HTMLFormControlsCollection} elements  the form elements
+ * @return {Object}                               form data as an object literal
+ */
+const formToJSON = elements => [].reduce.call(elements, (data, element) => {
+
+  // Make sure the element has the  properties and should be added.
+  if (isValidElement(element) && isValidValue(element)) {
+
+    /*
+     * Some fields allow for more than one value, so we need to check if this
+     * is one of those fields and, if so, store the values as an array.
+     */
+    if (isCheckbox(element)) {
+      data[element.name] = (data[element.name] || []).concat(element.value);
+    } else {
+      data[element.name] = element.value;
+    }
+  }
+
+  return data;
+}, {});
+
+/**
+ * A handler function to prevent default submission and run our custom script.
+ * @param  {Event} event  the submit event triggered by the user
+ * @return {void}
+ */
+const handleFormSubmit = event => {
+  
+  // Stop the form from submitting since we’re handling that with AJAX.
+  event.preventDefault();
+
+  // Call our function to get the form data.
+  const data = formToJSON(form.elements);
+
+  // Demo only: print the form data onscreen as a formatted JSON object.
+  const dataContainer = document.getElementsByClassName('results')[0];
+  
+  // Use `JSON.stringify()` to make the output valid, human-readable JSON.
+  dataContainer.textContent = JSON.stringify(data, null, "  ");
+  console.log( dataContainer.textContent = JSON.stringify(data, null, "  "));
+  
+};
+
+/*
+ * This is where things actually get started. We find the form element using
+ * its class name, then attach the `handleFormSubmit()` function to the 
+ * `submit` event.
+ */
+
+  const form = document.getElementsByClassName('myform')[0];
+  form.addEventListener('submit', handleFormSubmit);
+
+
+
+
+</script>
+<script>
+  function validate(){
+  const x = document.getElementsByClassName('myform')[0];
+  var y = x.getElementsByTagName("input");
+  var checker = true;
+  var i;
+  for (i = 0; i < y.length; i++) {
+      y[i].style.backgroundColor = "white";    
+      if (y[i].value ===""){
+        y[i].style.backgroundColor = "red";
+        checker = false;
+      }   
+
+  }
+  return checker;
+  }
+</script>
+</body>
+</html>

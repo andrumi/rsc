@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<body>
+<style>
+label, input,select{
+    display: inline-block;
+    width:15%;
+}
+#required, #passwordmessage{
+    display: inline-block;
+    color:red;
+}
+</style>
+
+<form class="myform" onsubmit="return (validateInput() && passwordMatch())">
+    <div class="form-group" id= "title_dropdown">
+        <label for="title" >Title/Prefix:</label>
+        <select id="titles">
+            <option value="Miss">Miss</option>
+            <option value="Mr">Mr</option>
+            <option value="Mrs">Mrs</option>
+        </select>
+    </div>
+    <br>
+    <label for="firstname">First Name:</label>
+    <input type="text" name="firstname" >
+    <div id="required" value = "" ></div>
+    <br>
+    <label for="lastname">Last Name:</label>
+    <input type="text" name="lastname" >
+    <div id="required"  value = ""></div>
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" name="password" id="password">
+    <div id="required"  value = ""></div>
+    <br>
+    <label for="passwordcheck">Repeat Password:</label>
+    <input type="password" name="passwordcheck" id="passwordcheck" >
+    <div id="required" value = ""></div>
+    <div id="passwordmessage" value = ""></div>
+    <br>
+    <br>
+    <input type="submit" value="submit">
+  
+
+</form>
+
+<script>
+    function validateInput(){
+        var valid = true;
+        const formElements = document.getElementsByClassName("myform")[0];
+        var inputs = formElements.getElementsByTagName("input");
+        var requiredMessage = formElements.getElementsByTagName("div");
+        for (var i =0; i <inputs.length; i++){
+            if (inputs[i].value === ""){
+                inputs[i].style="border-radius: 5px; border:red 1px solid;"
+                requiredMessage[i].innerHTML = 'Required Field';
+                valid = false;
+            }
+        }
+        return valid;
+    };
+    function passwordMatch(){
+        var valid = true;
+        var password = document.getElementById("password").value;
+        console.log(password);
+        var repeatPassword = document.getElementById("passwordcheck").value;
+        console.log(repeatPassword);
+        if (password != repeatPassword){
+            document.getElementById("passwordmessage").append("Passwords do not match");
+            valid = false;
+        }
+        else {
+            document.getElementById("passwordmessage").innerHTML = 'Passwords match';
+        }
+        return valid;
+    };
+</script>
+</body>
+</html>
